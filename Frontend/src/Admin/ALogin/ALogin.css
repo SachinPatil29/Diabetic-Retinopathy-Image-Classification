@@ -1,0 +1,71 @@
+* {
+    box-sizing: border-box;
+}
+
+.loginbody {
+    font-family: poppins;
+    font-size: 16px;
+    color: #fff;
+    background-color: rgba(0, 0, 0,0.5);
+    margin: auto auto;
+    padding: 20px;
+    box-shadow: 0 0 10px #000;
+    position: absolute;
+    top: 15%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 350px;
+    height: 450px;
+}
+
+.loginbody:before{
+    background-image: url('https://www.vmcdn.ca/f/files/shared/miscellaneous-stock-images/stethoscope-doctor-health.jpg;w=960');
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    content: "";
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    display: block;
+    filter: blur(3px);
+}
+
+.loginbody input{
+    margin: 5px 0px;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-family: poppins;
+    width: 100%;
+}
+
+.loginbody h1{
+    font-size: 32px;
+    font-weight: 600;
+    margin: 5p;
+}
+
+.loginbody button{
+    background-color: black;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px 0px;
+    /* width: 100%; */
+}
+
+.loginbody label {
+    display: block;
+    font-size: larger;
+    color: white;
+    padding: 5px;
+}
