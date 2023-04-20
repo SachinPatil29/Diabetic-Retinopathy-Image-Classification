@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+  }
+  
+  th {
+    font-weight: bold;
+    background-color: #f2f2f2;
+    padding: 0.5em;
+    text-align: left;
+  }
+  
+  td {
+    padding: 0.5em;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tr:hover {
+    background-color: #ddd;
+  }
+  
+table:before{
+    background-image: url('https://www.vmcdn.ca/f/files/shared/miscellaneous-stock-images/stethoscope-doctor-health.jpg;w=960');
+  }

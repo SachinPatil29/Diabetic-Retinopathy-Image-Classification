@@ -20,7 +20,8 @@ class Patient(models.Model):
     gender = models.CharField(max_length=10)
     phone_number = models.CharField(max_length=10)
     image = models.ImageField(upload_to='images/')
-    prediction = models.IntegerField(null=True, blank=True)
+    # prediction = models.IntegerField(null=True, blank=True)
+    prediction = models.CharField(max_length=30,null=True, blank=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

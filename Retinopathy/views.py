@@ -21,6 +21,7 @@ from rest_framework.response import Response
 # from .serializers import PatientSerializer
 # from . models import Patient
 from PIL import Image
+import os
 import numpy as np
 import tensorflow as tf
 # Create your views here.
@@ -56,20 +57,53 @@ class LoginAPI(KnoxLoginView):
             return Response({'error': 'Invalid username or password.'}, status=status.HTTP_400_BAD_REQUEST)
         
         
-@api_view(['GET'])
-def userData(request):
-    user = request.user
-    
-    if user.is_authenticated:
-        return Response({
-            'user_info':{
-                'id':user.id,
-                'username':user.username,
-                'email':user.email
-            },
-        })
+# class AdminLoginAPI(KnoxLoginView):
+#     permission_classes = (permissions.AllowAny,)
+
+#     def post(self, request, format=None):
+#         username = "admin"
+#         password = "12345"
+#         user = authenticate(request, username=username, password=password)
+#         if user is not None:
+#             login(request, user)
+#             return super().post(request, format=None)
+#         else:
+#             return Response({'error': 'Invalid username or password.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+def admin_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None and user.is_superuser:
+            # Admin user is authenticated
+            return JsonResponse({'message': 'Login successful'})
+        else:
+            return JsonResponse({'message': 'Invalid username or password'}, status=401)
+    else:
+        return JsonResponse({'message': 'Invalid request method'}, status=405)
+
         
-    return Response({'error':'not authenticated'}, status=400)
+        
+#Retrieving user data from database
+from django.http import JsonResponse
+from django.contrib.auth.models import User
+
+def user_list(request):
+    users = User.objects.all()
+    data = []
+    for user in users:
+        data.append({
+            'id': user.id,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'username': user.username,
+            'email': user.email,
+        })
+    return JsonResponse({'data': data})
+
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -95,11 +129,30 @@ def predict_patient(request):
         img_array = img_array / 255.
 
         # Load the trained model
-        model = tf.keras.models.load_model('D:\Image_classfication\DR_model1 (1).h5')    
+        model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'DR_model1 (1).h5')
+        model = tf.keras.models.load_model(model_path)
+        # model = tf.keras.models.load_model('D:\Image_classfication\DR_model1 (1).h5')    
 
         # Make the prediction
         prediction = model.predict(img_array)
         prediction = prediction.argmax(axis=-1)[0]
+        if prediction == 0:
+            prediction = "Normal"
+        
+        elif prediction == 1:
+            prediction = "Mild"
+            
+        elif prediction == 2:
+            prediction = "Moderate"
+            
+        elif prediction == 3:
+            prediction = "Severe NonProliferative"
+            
+        elif prediction == 4:
+            prediction = "Proliferative"
+            
+        else:
+            return None
 
         # Update the patient record with the prediction
         patient = Patient.objects.get(id=serializer.data['id'])
@@ -108,6 +161,29 @@ def predict_patient(request):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#Retrieving patient data from database
+
+from django.http import JsonResponse
+from .models import Patient
+
+def patient_list(request):
+    patients = Patient.objects.all()
+    data = []
+    for patient in patients:
+        data.append({
+            'id': patient.id,
+            'first_name': patient.first_name,
+            'last_name': patient.last_name,
+            'age': patient.age,
+            'gender': patient.gender,
+            'phone_number': patient.phone_number,
+            'image': request.build_absolute_uri(patient.image.url),
+            'prediction': patient.prediction,
+        })
+    return JsonResponse({'data': data})
+
 
 
 # =====================================================================================================================

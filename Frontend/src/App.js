@@ -8,6 +8,9 @@ import Signup from './Users/SignUp/Signup';
 // import UploadImage from './Users/UploadImage/UploadImage';
 import ALogin from './Admin/ALogin/ALogin';
 import Patient from './Users/Patient/Patient';
+import RetrainModel from './Admin/RetrainModel/RetrainModel';
+import UserData from './Admin/UserData/UserData';
+import PatientData from './Admin/PatientData/PatientData';
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
       {/* <Route path="/uploadImage" element={<UploadImage />}></Route> */}
       <Route path="/patients" element={<Patient/>}></Route>
       <Route path="/adminLogin" element={<ALogin />}></Route>
+      <Route path="/users" element={<UserData />}></Route>
+      <Route path="/patientDetails" element={<PatientData />}></Route>
+      <Route path="/retrainModel" element={<RetrainModel />}></Route>
       </Routes>
       </BrowserRouter>
     </>

@@ -47,30 +47,6 @@ const Login = () => {
       }catch(error){
         alert("Invalid credentials");
       }
-      // const response = await axios.post("http://127.0.0.1:8000/api/login/", {username, password});
-      //   .then((res) => {
-      //     if (userdata.username && userdata.password) {
-      //       localStorage.setItem("user", JSON.stringify(userdata));
-      //       console.log(userdata);
-      //       alert("logged in successfully");
-      //       navigate('/uploadImage')
-      //     }
-      //     console.log(res.status, res.data)
-      //   })
-      //   .catch(error => {
-      //     if (error.response) {
-      //       console.log(error.response.data);
-      //       console.log(error.response.status);
-      //       console.log(error.response.headers);
-      //     }
-      //     else if (error.request) {
-      //       console.log(error.request);
-      //     }
-      //     else {
-      //       console.log('Error', error.message)
-      //     }
-      //     console.log(error.config);
-      //   });
     }
   }
 
