@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from knox.auth import AuthToken
 from .serializers import UserSerializer, LoginSerializer, PatientSerializer
 from rest_framework import status
+from django.shortcuts import render
+from django.http import JsonResponse
 # from knox.auth import TokenAuthentication
 from django.contrib.auth import authenticate
 # from rest_framework.permissions import AllowAny
@@ -57,33 +59,20 @@ class LoginAPI(KnoxLoginView):
             return Response({'error': 'Invalid username or password.'}, status=status.HTTP_400_BAD_REQUEST)
         
         
-# class AdminLoginAPI(KnoxLoginView):
-#     permission_classes = (permissions.AllowAny,)
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
-#     def post(self, request, format=None):
-#         username = "admin"
-#         password = "12345"
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return super().post(request, format=None)
-#         else:
-#             return Response({'error': 'Invalid username or password.'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
+@csrf_exempt
 def admin_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None and user.is_superuser:
-            # Admin user is authenticated
-            return JsonResponse({'message': 'Login successful'})
+
+        if username == 'admin' and password == '12345':
+            return JsonResponse({'success': True})
         else:
-            return JsonResponse({'message': 'Invalid username or password'}, status=401)
-    else:
-        return JsonResponse({'message': 'Invalid request method'}, status=405)
+            return JsonResponse({'success': False, 'message': 'Invalid username or password'})
+
 
         
         
@@ -113,10 +102,29 @@ from .models import Patient
 from PIL import Image
 import numpy as np
 import tensorflow as tf
+from django.conf import settings
+import csv
 
+# # Open the CSV file for writing
+# csv_filepath = os.path.join(settings.CSV_ROOT, 'DR_ImageDataset.csv')
+# with open(csv_filepath, 'w', newline='') as csvfile:
+#     writer = csv.writer(csvfile)
+#     writer.writerow(['Image', 'Predicted Label'])
+
+# Define the CSV file path
+csv_filepath = os.path.join(settings.CSV_ROOT, 'DR_ImageDataset.csv')
+
+# Check if the CSV file exists, if not, create it with headers
+if not os.path.exists(csv_filepath):
+    with open(csv_filepath, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Image', 'Predicted Label'])
+    
 @api_view(['POST'])
+
 def predict_patient(request):
     serializer = PatientSerializer(data=request.data)
+    
     if serializer.is_valid():
         serializer.save()
 
@@ -124,17 +132,17 @@ def predict_patient(request):
         img = Image.open(request.FILES['image'])
         img = img.convert('RGB')
         img = img.resize((224, 224))
-        img_array = np.array(img)
-        img_array = np.expand_dims(img_array, axis=0)
-        img_array = img_array / 255.
+        img = np.array(img)
+        img = np.expand_dims(img, axis=0)
+        img = img / 255.
 
         # Load the trained model
-        model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'DR_model1 (1).h5')
-        model = tf.keras.models.load_model(model_path)
-        # model = tf.keras.models.load_model('D:\Image_classfication\DR_model1 (1).h5')    
+        # model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'DR_model1 (1).h5')
+        model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'DR_model3.h5')
+        model = tf.keras.models.load_model(model_path)    
 
         # Make the prediction
-        prediction = model.predict(img_array)
+        prediction = model.predict(img)
         prediction = prediction.argmax(axis=-1)[0]
         if prediction == 0:
             prediction = "Normal"
@@ -154,6 +162,11 @@ def predict_patient(request):
         else:
             return None
 
+        # Write the prediction to the CSV file
+        with open(csv_filepath, 'a', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow([request.FILES['image'].name, prediction])
+        
         # Update the patient record with the prediction
         patient = Patient.objects.get(id=serializer.data['id'])
         patient.prediction = prediction
@@ -183,6 +196,211 @@ def patient_list(request):
             'prediction': patient.prediction,
         })
     return JsonResponse({'data': data})
+#=====================================================================================================================================
+
+
+# import tensorflow as tf
+# from tensorflow.keras.preprocessing import image
+# import numpy as np
+# import matplotlib.pyplot as plt
+# from tensorflow.keras.models import Model, load_model
+# import numpy as np
+# import pandas as pd
+# import os
+# from PIL import Image
+# import tensorflow as tf
+# from numpy import asarray
+# import matplotlib.pyplot as plt
+# tf.compat.v1.enable_eager_execution()
+# import time
+# from tensorflow.keras import Model, layers, models, optimizers
+# from tensorflow.keras.callbacks import CSVLogger
+# from tensorflow.keras.constraints import UnitNorm
+
+# class retrainModel():
+#     global model,model_path
+#     IMAGE_SIZE = [224, 224]
+#     model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'DR_model3.h5')
+#     model = load_model(model_path)
+#     train_path = os.path.join(settings.CSV_ROOT, 'Opencv_augmented_train')
+#     test_path = os.path.join(settings.CSV_ROOT, 'Opencv_modified_test')
+#     # csv_filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'DR_ImageDataset.csv')
+#     # train_path = 'D:\KLETU\3rd Year\6th Sem\MinorProject\MinorProject\Vinayak Augmented'
+    
+#     print(train_path)
+
+#     train_ds= tf.keras.utils.image_dataset_from_directory(
+#               train_path,
+#               validation_split=0.2,
+#               subset="training",
+#               seed=123,
+#               image_size=(224, 224),
+#               batch_size=16)
+#     val_ds = tf.keras.utils.image_dataset_from_directory(
+#       test_path,
+#       validation_split=0.2,
+#       subset="validation",
+#       seed=123,
+#       image_size=(224, 224),
+#       batch_size=16)
+   
+#     def retrain_model():
+#         print("model start")
+#         model = load_model(model_path)
+
+#         for layer in model.layers[:-1]:
+#             layer.trainable = False
+
+#         new_output = tf.keras.layers.Dense(5, activation='softmax')(model.layers[-2].output)
+
+#         model = Model(inputs=model.inputs, outputs=new_output)
+
+#         opti = tf.keras.optimizers.Adagrad(
+#             learning_rate=0.001,
+#             initial_accumulator_value=0.01,
+#             epsilon=1e-06,
+#             name="Adagrad"
+#         )
+
+#         model.compile(
+#             optimizer=opti, 
+#             loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False), 
+#             metrics=[
+#                 'accuracy'
+#             ]
+#         )
+#         return model
+
+#     model.summary()
+
+#     new_model = retrain_model()
+#     epochs=2
+#     # time_callback = TimeHistory()
+
+#     try:
+#         history = new_model.fit(
+#         train_ds,
+#         validation_data = val_ds,
+#         epochs = epochs,
+#         # callbacks = [time_callback]
+#         )
+
+#     except Exception as e:
+#         print(e)
+
+#     new_model.save('/workspace/DP/Tensorflow/Saved_models/DR_model4.h5')
+
+
+########################################################################################################################
+
+# import tensorflow as tf
+# import pandas as pd
+# from tensorflow.keras.preprocessing import image
+# from tensorflow.keras.preprocessing.image import ImageDataGenerator
+# import numpy as np
+# import matplotlib.pyplot as plt
+# from tensorflow.keras.models import Model, load_model
+# from tensorflow.keras.preprocessing.image import load_img, img_to_array
+# from tensorflow.keras.applications.resnet50 import preprocess_input
+# import os
+# from PIL import Image
+# from numpy import asarray
+# import matplotlib.pyplot as plt
+# tf.compat.v1.enable_eager_execution()
+# import time
+# from tensorflow.keras import Model, layers, models, optimizers
+# from sklearn.model_selection import train_test_split
+# import mysql.connector
+# import io
+# from tensorflow.keras.constraints import UnitNorm
+
+
+# def RetrainModel(request):
+#     model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'DR_model3.h5')
+#     model = load_model(model_path)
+#     data = pd.read_csv(os.path.join(settings.CSV_ROOT, 'DR_ImageDataset.csv'))
+    
+#     # image_paths = data['Image'].tolist()
+#     # labels = data['Predicted Label'].tolist()
+    
+#     # Connect to the database
+#     cnx = mysql.connector.connect(user='root', password='root',
+#                                   host='localhost',
+#                                   database='retinopathy')
+    
+#     # Fetch the images and labels
+#     cursor = cnx.cursor()
+#     query = "SELECT image, prediction FROM retinopathy_patient"
+#     cursor.execute(query)
+#     images = []
+#     labels = []
+#     for (image, label) in cursor:
+#         images.append(image)
+#         labels.append(label)
+    
+#     # Preprocess the images
+#     width, height = 224, 224
+#     num_images = len(images)
+#     X = np.zeros((num_images, width, height, 3))
+#     for i, image in enumerate(images):
+#         image = Image.open(io.BytesIO(image))
+#         image = image.resize((width, height))
+#         X[i, :, :, :] = np.array(image) / 255.0
+    
+#     # Split the data into training and validation sets
+#     X_train, X_val, y_train, y_val = train_test_split(X, labels, test_size=0.2, random_state=42)
+    
+#     #compile the model
+#     opt = tf.keras.optimizers.Adagrad(
+#         learning_rate=0.001,
+#         initial_accumulator_value=0.01,
+#         epsilon=1e-06,
+#         name="Adagrad"
+#     )
+    
+#     model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
+    
+#     # model.summary()
+    
+#     # Train the model
+#     model.fit(X_train, y_train, epochs=10, batch_size=2, validation_data=(X_val, y_val))
+
+    
+#     model.save('')
+    
+#     # Return a JSON response to indicate that the training was successful
+#     return JsonResponse({'status': 'success'})
+
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from django.http import JsonResponse
+from .models import Patient
+
+def get_patient(request, patient_id):
+    # Query the database for the matching patient data
+    try:
+        patient = Patient.objects.get(id=patient_id)
+    except Patient.DoesNotExist:
+        return JsonResponse({'error': 'Patient not found'})
+
+    # Return the patient data as JSON
+    data = {
+        'id': patient.id,
+        'fname': patient.fname,
+        'lname': patient.lname,
+        'age': patient.age,
+        'gender': patient.gender,
+        'phonenumber': patient.phonenumber,
+        'image': patient.image.url,
+        'labels': patient.labels.split(',')
+    }
+    return JsonResponse(data)
+
+
+
+
+    
+
+
 
 
 
@@ -252,3 +470,52 @@ def patient_list(request):
     # updated_model.save(updated_model_path)
 
     # return JsonResponse({'success': 'Model retraining complete.'}, status=200)
+
+
+#=============================================================================================================
+
+# import paramiko
+# import os
+# from django.conf import settings
+# from django.http import JsonResponse
+
+# def retrain_model(request):
+#     # Set the credentials for the DGX server
+#     host = '172.17.0.3'
+#     port = 4828
+#     username = 'uday@10.2.0.7'
+#     password = 'kle@aiml'
+
+#     # Set the path to the Python script on the DGX server
+#     remote_script_path = '/workspace/DP/Minor_Project/retinopathy/train.py'
+
+#     # Set the path to the model file and dataset on the local machine
+#     local_model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'DR_model3.h5')
+#     # local_dataset_path = os.path.join(settings.CSV_ROOT, 'DR_ImageDataset.csv')
+#     local_dataset_path = 'C:\Users\sachi\OneDrive\Desktop\Vinayak Augmented\Opencv_augmented_train'
+
+#     # Set the paths to the model file and dataset on the DGX server
+#     remote_model_path = '/workspace/DP/Minor_Project/model/DR_model3.h5'
+#     remote_dataset_path = '/workspace/DP/Minor_Project/dataset/Opencv_augmented_train'
+
+#     # Connect to the DGX server via SSH
+#     ssh = paramiko.SSHClient()
+#     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+#     ssh.connect(hostname=host, port=port, username=username, password=password)
+
+#     # Upload the model and dataset to the DGX server
+#     ftp = ssh.open_sftp()
+#     ftp.put(local_model_path, remote_model_path)
+#     ftp.put(local_dataset_path, remote_dataset_path)
+#     ftp.close()
+
+#     # Run the Python script on the DGX server to retrain the model on the dataset
+#     stdin, stdout, stderr = ssh.exec_command(f'python {remote_script_path} --model {remote_model_path} --data {remote_dataset_path}')
+#     output = stdout.read().decode('utf-8')
+#     errors = stderr.read().decode('utf-8')
+
+#     # Close the SSH connection
+#     ssh.close()
+
+#     # Return the output and errors as a JSON response
+#     return JsonResponse({'output': output, 'errors': errors})

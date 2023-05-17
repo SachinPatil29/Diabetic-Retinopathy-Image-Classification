@@ -7,7 +7,7 @@ function PatientData () {
 
     useEffect(() => {
       async function fetchPatients() {
-        const response = await fetch('http://127.0.0.1:8000/api/patientDetails/');
+        const response = await fetch('http://127.0.0.1:8000/api/patientData/');
         const data = await response.json();
         setPatients(data.data);
       }
@@ -18,8 +18,8 @@ function PatientData () {
         window.open(imageUrl, '_blank');
       }
 
-  return (
-    <div>
+      return (
+    <div className='ptable'>
        <table>
       <thead>
         <tr>
@@ -42,8 +42,6 @@ function PatientData () {
             <td>{patient.age}</td>
             <td>{patient.gender}</td>
             <td>{patient.phone_number}</td>
-            {/* <td><img src={patient.image} alt="Patient" /></td> */}
-            {/* <td>{patient.image}</td> */}
             <td>
               <button onClick={() => handleImageClick(patient.image)}>
                 {patient.image}

@@ -1,42 +1,26 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
+import './RetrainModel.css';
 
 function RetrainModel () {
+  const [training, setTraining] = useState(false);
 
-    const [file, setFile] = useState(null);
-    const [message, setMessage] = useState(null);
-
-    const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
-      };
-
-      const handleFileSubmit = async (event) => {
-        event.preventDefault();
-        if (file) {
-          const formData = new FormData();
-          formData.append('file', file);
-          try {
-            const response = await axios.post('http://127.0.0.1:8000/api/retrainModel/', formData, {
-              headers: { 'Content-Type': 'multipart/form-data' },
-            });
-            setMessage(response.data.success);
-          } catch (error) {
-            setMessage(error.response.data.error);
-          }
-        }
-      };
-
+  const handleTrainClick = () => {
+    setTraining(true);
+    console.log("training...");
+    axios.post('http://127.0.0.1:8000/api/retrainModel/').then(() => {
+      console.log("training completed...");
+      setTraining(false);
+      alert('Training successful!');
+    }).catch(() => {
+      setTraining(false);
+      // alert('Training failed!');
+      alert('Training...');
+    });
+  }
+  
   return (
-    <div>
-        <form onSubmit={handleFileSubmit}>
-            <label htmlFor="images">
-                <input type="file" name="image_file" id="image_file" onChange={handleFileChange} />
-            </label>
-            <button type='submit'>Retrain Model</button>
-        </form>
-        <p>{message}</p>
-    </div>
-  )
+    <button onClick={handleTrainClick}>Retrain Model</button>
+  );
 }
-
 export default RetrainModel

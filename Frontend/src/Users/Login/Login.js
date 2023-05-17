@@ -39,6 +39,7 @@ const Login = () => {
           axios.defaults.headers.common['Authorization'] = `Token ${token}`;
           console.log(token)
           alert("Logged in successfully");
+          localStorage.setItem("auth", token);
           navigate('/patients');
         }
         else{

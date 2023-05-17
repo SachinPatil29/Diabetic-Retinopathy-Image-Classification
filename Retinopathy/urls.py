@@ -1,9 +1,10 @@
 from django.urls import path
-from . import views 
 from knox import views as knox_views
+
+from . import views
+from . import models
 # from django.urls import path
-from .views import predict_patient
-from .views import user_list, patient_list, admin_login
+from .views import (admin_login, get_patient, patient_list, predict_patient,user_list)
 
 urlpatterns = [
     path('register/',views.RegistrationView.as_view(), name='register'),
@@ -12,7 +13,11 @@ urlpatterns = [
     # path('user/',views.userData),
     path("users/",user_list, name="users"),
     path('patients/', predict_patient),
-    path('patientDetails/', patient_list, name="PatientDetails"),
+    path('patientData/', patient_list, name="PatientDetails"),
+    # path('retrainModel/',views.retrainModel.as_view(), name='retrain'),
+    # path('retrainModel/', RetrainModel, name="RetrainModel"),
+    path("retrainModel/", models.RetrainModel, name=""),
+    path('patients/<int:patient_id>/', get_patient, name='get_patient'),
     path('logout/',knox_views.LogoutView.as_view()),
     path('logoutall/', knox_views.LogoutAllView.as_view()),
     

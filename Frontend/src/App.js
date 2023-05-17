@@ -11,12 +11,18 @@ import Patient from './Users/Patient/Patient';
 import RetrainModel from './Admin/RetrainModel/RetrainModel';
 import UserData from './Admin/UserData/UserData';
 import PatientData from './Admin/PatientData/PatientData';
+import Dashboard from './Admin/Dashboard/Dashboard';
+import PatientDetails from './Users/PatientDetails/PatientDetails';
+// import AdminNavbar from './Admin/AdminNavbar/AdminNavbar';
 
 function App() {
+
+  const auth = localStorage.getItem('admin');
   return (
     <>
       <BrowserRouter>
       <Navbar />
+      {/* <AdminNavbar /> */}
       <Routes>
 
       <Route path="/" element={<Home />}></Route>
@@ -26,8 +32,10 @@ function App() {
       <Route path="/patients" element={<Patient/>}></Route>
       <Route path="/adminLogin" element={<ALogin />}></Route>
       <Route path="/users" element={<UserData />}></Route>
-      <Route path="/patientDetails" element={<PatientData />}></Route>
+      <Route path="/patientData" element={<PatientData />}></Route>
       <Route path="/retrainModel" element={<RetrainModel />}></Route>
+      <Route path="/dashboard" element={<Dashboard />}></Route>
+      <Route path="/patientDetails" element={<PatientDetails />}></Route>
       </Routes>
       </BrowserRouter>
     </>

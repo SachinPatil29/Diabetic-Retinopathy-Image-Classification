@@ -6,9 +6,10 @@ import { toast } from 'react-toastify';
 import { Bounce } from 'react-toastify';
 import './Navbar.css';
 
+
 const Navbar = () => {
     const navigate = useNavigate();
-    const auth = localStorage.getItem('user');
+    const auth = localStorage.getItem('auth');
     const logout = () => {
         localStorage.clear();
         toast.success("You have successfully logged out!",{
@@ -22,9 +23,9 @@ const Navbar = () => {
         <div id='top-right'>
             {
                 auth? <>
-                    <Link className='bar1' to="/dashboard">Dashboard</Link>  
-                    <Link className="bar1" to="/about">About</Link>
-                    <Link className="bar1" to="/contact">Contact</Link>
+                    {/* <Link className='bar1' to="/dashboard">Dashboard</Link>   */}
+                    {/* <Link className="bar1" to="/about">About</Link>
+                    <Link className="bar1" to="/contact">Contact</Link> */}
                     <Link onClick={logout} className="bar1" to="/login">Logout</Link>
                 </> : <>
                     <Link className="bar1" to="/">Home</Link>
