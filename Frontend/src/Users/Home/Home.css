@@ -37,14 +37,214 @@
     color: #fff;
     background-color: rgba(0, 0, 0, 0);
     margin: 10pt auto;
-    margin-top: 40px;
-    padding: 40px;
+    margin-top: 5%;
+    padding: 20px;
     border-radius: 10px;
     position: absolute;
     top: 15%;
     bottom: 0;
     left: 0;
-    right: 0;
-    width: 90%;
-    height: 80%;
+    right: 80%;
+    width: 20%;
+    height: 40%;
+    border-radius: 50%;
+    
+} 
+.img4{
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0);
+    margin: 10pt auto;
+    margin-top: 25%;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 15%;
+    bottom: 0;
+    left: 80%;
+    right: 0%;
+    width: 20%;
+    height: 40%;
+    border-radius: 50%;
+    
+} 
+.img5{
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0);
+    margin: 10pt auto;
+    margin-top: 45%;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 15%;
+    bottom: 0;
+    left: 0%;
+    right: 80%;
+    width: 20%;
+    height: 40%;
+    border-radius: 50%;
+    
+} 
+.img6{
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0);
+    margin: 10pt auto;
+    margin-top: 65%;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 15%;
+    bottom: 0;
+    left: 80%;
+    right: 0%;
+    width: 20%;
+    height: 40%;
+    border-radius: 50%;
+    
+} 
+.img7{
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0);
+    margin: 10pt auto;
+    margin-top: 85%;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 15%;
+    bottom: 0;
+    left: 0%;
+    right: 80%;
+    width: 20%;
+    height: 40%;
+    border-radius: 50%;
+    
+   
+} 
+
+.border1{
+    width: 160%;
+    height: 240%;
+    border: 3px solid black;
+    margin-top: 50cm;
+    margin-bottom: 10%;
+    background-color:rgb(159, 177, 184);
+    margin: auto;
+    margin-left: 0%;
+    margin-right: 0%;
+    padding: 30px 30px;
+    border-radius: 15px;
+    line-height: 20px;
+    outline: 0;
+   
+}
+.border2{
+    width: 100%;
+    height: 240%;
+    border: 3px solid black;
+    background-color:rgb(159, 177, 184);
+    margin: auto;
+    margin-left: 0%;
+    margin-right: 0%;
+    padding: 1px 1px;
+    border-radius: 15px;
+    line-height: 20px;
+    outline: 0;
+    
+}
+.border3{
+    width: 100%;
+    height: 240%;
+    border: 3px solid black;
+    background-color:rgb(159, 177, 184);
+    margin: auto;
+    margin-left: 0%;
+    margin-right: 0%;
+    padding: 5px 5px;
+    border-radius: 15px;
+    line-height: 20px;
+    outline: 0;
+}
+.border4{
+    width: 100%;
+    height: 240%;
+    margin-bottom: 200%;
+    border: 3px solid black;
+    background-color:rgb(159, 177, 184);
+    margin: auto;
+    margin-left: 0%;
+    margin-right: 0%;
+    padding: 10px 10px;
+    border-radius: 15px;
+    line-height: 20px;
+    outline: 0;
+    
+}
+.border5{
+    width: 100%;
+    height: 240%;
+    border: 3px solid black;
+    background-color:rgb(159, 177, 184);
+    margin: auto;
+    margin-left: 0%;
+    margin-right: 0%;
+    padding: 1px 1px;
+    border-radius: 15px;
+    line-height: 20px;
+    outline: 0;
+    
+}
+
+.text1{
+    margin: 10pt auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 3%;
+    margin-bottom: 80%;
+    position: absolute;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: large;
+
+}
+.text2{
+    margin: 10pt auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 23%;
+    margin-bottom: 80%;
+    position: absolute;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: large;
+    
+}
+.text3{
+    margin: 10pt auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 43%;
+    margin-bottom: 80%;
+    position: absolute;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: large;
+    
+}
+.text4{
+    margin: 10pt auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 62%;
+    margin-bottom: 80%;
+    position: absolute;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: large;
+    
+}
+.text5{
+    margin: 10pt auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 82%;
+    margin-bottom: 80%;
+    position: absolute;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: large;
+    
 } */
