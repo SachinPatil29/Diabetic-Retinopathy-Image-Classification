@@ -2,6 +2,7 @@ from django.urls import path
 from knox import views as knox_views
 
 from . import views
+from . import serializers
 from . import models
 # from django.urls import path
 from .views import (admin_login, get_patient, patient_list, predict_patient,user_list)
@@ -14,11 +15,8 @@ urlpatterns = [
     path("users/",user_list, name="users"),
     path('patients/', predict_patient),
     path('patientData/', patient_list, name="PatientDetails"),
-    # path('retrainModel/',views.retrainModel.as_view(), name='retrain'),
-    # path('retrainModel/', RetrainModel, name="RetrainModel"),
-    path("retrainModel/", models.RetrainModel, name=""),
+    # path("retrainModel/", serializers.RetrainModel, name=""),
     path('patients/<int:patient_id>/', get_patient, name='get_patient'),
     path('logout/',knox_views.LogoutView.as_view()),
     path('logoutall/', knox_views.LogoutAllView.as_view()),
-    
 ]

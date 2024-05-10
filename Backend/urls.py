@@ -6,6 +6,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('',views.index, name='index'),
     path('api/',include('Retinopathy.urls'))
 ] 
 
